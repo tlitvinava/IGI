@@ -1,0 +1,9 @@
+
+<!-- autoservice/templates/autoservice/profile.html -->
+{% extends "autoservice/base.html" %}
+
+{% block content %}
+  <h1>Профиль пользователя</h1>
+  <p>Привет, {{ user.username }}!</p>
+  <p>Электронная почта: {{ user.email }}</p>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "autoservice/admin_base.html" %}
+
+{% block content %}
+  <h2>Управление услугами</h2>
+  
+  <!-- Секция: Типы авто -->
+  <section>
+    <h3>Типы авто</h3>
+    <form method="post">
+      {% csrf_token %}
+      {{ auto_form.as_p }}
+      <button type="submit" name="auto-submit">Добавить тип авто</button>
+    </form>
+    <table border="1" cellpadding="5" cellspacing="0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Название</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for auto in auto_types %}
+          <tr>
+            <td>{{ auto.id }}</td>
+            <td>{{ auto.name }}</td>
+            <td>
+              <a href="{% url 'admin-autotype-edit' auto.id %}">Редактировать</a> |
+              <a href="{% url 'admin-autotype-delete' auto.id %}">Удалить</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3">Нет типов авто.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  
+  <!-- Секция: Услуги -->
+  <section>
+    <h3>Услуги</h3>
+    <form method="post">
+      {% csrf_token %}
+      {{ service_form.as_p }}
+      <button type="submit" name="service-submit">Добавить услугу</button>
+    </form>
+    <table border="1" cellpadding="5" cellspacing="0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Название</th>
+          <th>Цена</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for service in services %}
+          <tr>
+            <td>{{ service.id }}</td>
+            <td>{{ service.name }}</td>
+            <td>{{ service.price }} руб.</td>
+            <td>
+              <a href="{% url 'admin-service-edit' service.id %}">Редактировать</a> |
+              <a href="{% url 'admin-service-delete' service.id %}">Удалить</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4">Нет услуг.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  
+  <!-- Секция: Запчасти -->
+  <section>
+    <h3>Запчасти</h3>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ spare_form.as_p }}
+      <button type="submit" name="spare-submit">Добавить запчасть</button>
+    </form>
+    <table border="1" cellpadding="5" cellspacing="0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Название</th>
+          <th>Цена</th>
+          <th>Фото</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for spare in spare_parts %}
+          <tr>
+            <td>{{ spare.id }}</td>
+            <td>{{ spare.name }}</td>
+            <td>{{ spare.price }} руб.</td>
+            <td>
+              {% if spare.image %}
+                <img class="spStyle" src="{{ spare.image.url }}" alt="Запчасть">
+              {% else %}
+                <img class="spStyle" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQKc_z4Lm4bB8ObmbaXYB4N0tl3glo4AEFUw&s" alt="Запчасть по умолчанию">
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'admin-sparepart-edit' spare.id %}">Редактировать</a> |
+              <a href="{% url 'admin-sparepart-delete' spare.id %}">Удалить</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4">Нет запчастей.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  <style>
+    .spStyle{
+      height: 200px;
+      width: 200px;
+    }
+    </style>
+{% endblock %}

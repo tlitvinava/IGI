@@ -1,0 +1,12 @@
+{% extends "autoservice/base.html" %}
+{% block content %}
+<h1>О компании</h1>
+{% if company_info %}
+  <img src="{{ company_info.logo.url }}" alt="Логотип компании">
+  <p>{{ company_info.description }}</p>
+  <p><strong>История по годам:</strong> {{ company_info.history }}</p>
+  <p><strong>Реквизиты:</strong> {{ company_info.details }}</p>
+{% else %}
+  <p>Информация о компании ещё не добавлена.</p>
+{% endif %}
+{% endblock %}

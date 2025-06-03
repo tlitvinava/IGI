@@ -1,0 +1,9 @@
+{% extends "autoservice/base.html" %}
+
+{% block content %}
+  <h1>{{ service.name }}</h1>
+  <p><strong>Описание:</strong> {{ service.description }}</p>
+  <p><strong>Стоимость:</strong> {{ service.price }} руб.</p>
+  <p><strong>Тип услуги:</strong> {{ service.service_type }}</p>
+  <p><a href="{% url 'service-list' %}">Вернуться к списку услуг</a></p>
+{% endblock %}

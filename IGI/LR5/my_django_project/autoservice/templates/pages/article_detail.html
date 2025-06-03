@@ -1,0 +1,19 @@
+{% extends "autoservice/base.html" %}
+
+{% block content %}
+  <h1>{{ article.title }}</h1>
+  
+  {% if article.image %}
+    <img src="{{ article.image.url }}" alt="{{ article.title }}" style="max-width:500px; margin-bottom:1em;">
+  {% endif %}
+  
+  <!-- Полный текст новости -->
+  <div>
+    {{ article.content|linebreaks }}
+  </div>
+  
+  <p><small>Опубликовано: {{ article.pub_date|date:"d/m/Y H:i" }}</small></p>
+  
+  <!-- Пример кнопки для возврата к списку новостей -->
+  <a href="{% url 'news' %}" class="btn btn-secondary">Вернуться к новостям</a>
+{% endblock %}

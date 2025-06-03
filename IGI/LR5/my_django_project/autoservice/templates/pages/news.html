@@ -1,0 +1,81 @@
+{% extends "autoservice/base.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>Новости</h1>
+  <ul style="list-style: none; padding: 0;">
+    {% for article in articles %}
+      <li style="margin-bottom: 2em;">
+        <h2>{{ article.title }}</h2>
+        {% if article.image %}
+          <img src="{{ article.image.url }}" alt="{{ article.title }}" style="max-width:300px;">
+        {% else %}
+          <img src="https://via.placeholder.com/300x200" alt="{{ article.title }}" style="max-width:300px;">
+        {% endif %}
+        <p>{{ article.summary }}</p>
+        <a href="{% url 'article_detail' article.pk %}" class="btn btn-primary">Читать далее</a>
+      </li>
+    {% empty %}
+      <li style="margin-bottom: 2em;">
+        <h2>Новая модель электромобиля — революция в мире авто</h2>
+        <img src="https://images.pexels.com/photos/4141712/pexels-photo-4141712.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 1" style="max-width:300px;">
+        <p>Описание новости 1: Представлена новая модель электромобиля, сочетающая передовые технологии и высокую экологичность.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+      <li style="margin-bottom: 2em;">
+        <h2>Скидки и бонусы на ремонт автомобиля</h2>
+        <img src="https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 2" style="max-width:300px;">
+        <p>Описание новости 2: Автосервис объявил о скидках на комплексное техническое обслуживание.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+      <li style="margin-bottom: 2em;">
+        <h2>Инновационные технологии в диагностике авто</h2>
+        <img src="https://images.pexels.com/photos/210006/pexels-photo-210006.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 3" style="max-width:300px;">
+        <p>Описание новости 3: Новая система компьютерной диагностики повышает точность выявления неисправностей.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+      <li style="margin-bottom: 2em;">
+        <h2>Открытие нового сервисного центра</h2>
+        <img src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 4" style="max-width:300px;">
+        <p>Описание новости 4: В центре города открыли современный автосервис с расширенным спектром услуг.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+      <li style="margin-bottom: 2em;">
+        <h2>День открытых дверей в компании</h2>
+        <img src="https://images.pexels.com/photos/107675/pexels-photo-107675.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 5" style="max-width:300px;">
+        <p>Описание новости 5: Приглашаем посетить автосервис на день открытых дверей с мастер-классами.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+      <li style="margin-bottom: 2em;">
+        <h2>Успех новой модели: отзывы клиентов</h2>
+        <img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 6" style="max-width:300px;">
+        <p>Описание новости 6: Клиенты отмечают высокое качество и экономию топлива новой модели электромобиля.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+      <li style="margin-bottom: 2em;">
+        <h2>Новейшие технологии ремонта авто</h2>
+        <img src="https://images.pexels.com/photos/276024/pexels-photo-276024.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 7" style="max-width:300px;">
+        <p>Описание новости 7: Автосервис внедряет инновационные методики ремонта и восстановления после ДТП.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+      <li style="margin-bottom: 2em;">
+        <h2>Как выбрать качественное ТО</h2>
+        <img src="https://images.pexels.com/photos/358080/pexels-photo-358080.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 8" style="max-width:300px;">
+        <p>Описание новости 8: Эксперты рассказывают, на что обращать внимание при выборе техобслуживания.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+      <li style="margin-bottom: 2em;">
+        <h2>Будущее автосервиса: новинки 2025 года</h2>
+        <img src="https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 9" style="max-width:300px;">
+        <p>Описание новости 9: Рынок автосервисных услуг готовится к волне инновационных решений в 2025 году.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+      <li style="margin-bottom: 2em;">
+        <h2>Эксперт: тенденции развития автоиндустрии</h2>
+        <img src="https://images.pexels.com/photos/132037/pexels-photo-132037.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Новость 10" style="max-width:300px;">
+        <p>Описание новости 10: Анализ экспертов о том, какие изменения ждут автомобильный рынок в ближайшие годы.</p>
+        <a href="#" class="btn btn-primary">Читать далее</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

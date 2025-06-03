@@ -1,0 +1,88 @@
+{% extends "autoservice/base.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>Контакты</h1>
+  <ul style="list-style: none; padding: 0;">
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 1" style="max-width:150px;">
+      <p><strong>Имя:</strong> Иван Иванов</p>
+      <p><strong>Должность:</strong> Администратор</p>
+      <p><strong>Телефон:</strong> +375 (29) 111-22-33</p>
+      <p><strong>Email:</strong> admin@example.com</p>
+      <p><strong>Описание:</strong> Руководитель административного отдела, отвечает за организацию работы офиса.</p>
+    </li>
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 2" style="max-width:150px;">
+      <p><strong>Имя:</strong> Александр Петров</p>
+      <p><strong>Должность:</strong> Мастер по ремонту двигателей</p>
+      <p><strong>Телефон:</strong> +375 (29) 222-33-44</p>
+      <p><strong>Email:</strong> master1@example.com</p>
+      <p><strong>Описание:</strong> Специалист по ремонту и настройке двигателей.</p>
+    </li>
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/210006/pexels-photo-210006.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 3" style="max-width:150px;">
+      <p><strong>Имя:</strong> Дмитрий Смирнов</p>
+      <p><strong>Должность:</strong> Мастер по трансмиссиям</p>
+      <p><strong>Телефон:</strong> +375 (29) 333-44-55</p>
+      <p><strong>Email:</strong> master2@example.com</p>
+      <p><strong>Описание:</strong> Эксперт по ремонту трансмиссий.</p>
+    </li>
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 4" style="max-width:150px;">
+      <p><strong>Имя:</strong> Сергей Кузнецов</p>
+      <p><strong>Должность:</strong> Мастер по электронике</p>
+      <p><strong>Телефон:</strong> +375 (29) 444-55-66</p>
+      <p><strong>Email:</strong> master3@example.com</p>
+      <p><strong>Описание:</strong> Профессионал по диагностике и ремонту электронных систем.</p>
+    </li>
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 5" style="max-width:150px;">
+      <p><strong>Имя:</strong> Мария Иванова</p>
+      <p><strong>Должность:</strong> Менеджер по работе с клиентами</p>
+      <p><strong>Телефон:</strong> +375 (29) 555-66-77</p>
+      <p><strong>Email:</strong> maria@example.com</p>
+      <p><strong>Описание:</strong> Консультант по вопросам обслуживания клиентов.</p>
+    </li>
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 6" style="max-width:150px;">
+      <p><strong>Имя:</strong> Алексей Федоров</p>
+      <p><strong>Должность:</strong> Менеджер по сервису</p>
+      <p><strong>Телефон:</strong> +375 (29) 666-77-88</p>
+      <p><strong>Email:</strong> alexey@example.com</p>
+      <p><strong>Описание:</strong> Координирует работу мастеров и следит за качеством обслуживания.</p>
+    </li>
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 7" style="max-width:150px;">
+      <p><strong>Имя:</strong> Ольга Соколова</p>
+      <p><strong>Должность:</strong> Специалист по гарантийному ремонту</p>
+      <p><strong>Телефон:</strong> +375 (29) 777-88-99</p>
+      <p><strong>Email:</strong> olga@example.com</p>
+      <p><strong>Описание:</strong> Разбирается с гарантийными случаями и обслуживанием клиентов.</p>
+    </li>
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/210003/pexels-photo-210003.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 8" style="max-width:150px;">
+      <p><strong>Имя:</strong> Павел Никитин</p>
+      <p><strong>Должность:</strong> Специалист по ремонту кузова</p>
+      <p><strong>Телефон:</strong> +375 (29) 888-99-00</p>
+      <p><strong>Email:</strong> pavel@example.com</p>
+      <p><strong>Описание:</strong> Выполняет кузовной ремонт и покраску автомобилей.</p>
+    </li>
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 9" style="max-width:150px;">
+      <p><strong>Имя:</strong> Елена Васильева</p>
+      <p><strong>Должность:</strong> Специалист по диагностике</p>
+      <p><strong>Телефон:</strong> +375 (29) 999-00-11</p>
+      <p><strong>Email:</strong> elena@example.com</p>
+      <p><strong>Описание:</strong> Проводит компьютерную диагностику и анализ неисправностей.</p>
+    </li>
+    <li class="contact-card" style="margin-bottom: 1em; border: 1px solid #ccc; padding: 1em;">
+      <img src="https://images.pexels.com/photos/356040/pexels-photo-356040.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Контакт 10" style="max-width:150px;">
+      <p><strong>Имя:</strong> Виктор Королев</p>
+      <p><strong>Должность:</strong> Специалист по поставке запчастей</p>
+      <p><strong>Телефон:</strong> +375 (29) 000-11-22</p>
+      <p><strong>Email:</strong> viktor@example.com</p>
+      <p><strong>Описание:</strong> Отвечает за логистику и поставку качественных запчастей.</p>
+    </li>
+  </ul>
+{% endblock %}

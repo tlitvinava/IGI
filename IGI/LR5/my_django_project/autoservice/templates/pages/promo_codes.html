@@ -1,0 +1,15 @@
+{% extends "autoservice/base.html" %}
+{% block content %}
+<h1>Промокоды и купоны</h1>
+<ul>
+  {% for promo in promo_codes %}
+    <li>{{ promo.code }} – имеет скидку {{ promo.discount }}%</li>
+  {% empty %}
+    <li>PROMO10 – имеет скидку 10%</li>
+    <li>SAVE20 – имеет скидку 20%</li>
+    <li>DISCOUNT15 – имеет скидку 15%</li>
+    <li>SPRING5 – имеет скидку 5%</li>
+    <li>WINTER25 – имеет скидку 25%</li>
+  {% endfor %}
+</ul>
+{% endblock %}

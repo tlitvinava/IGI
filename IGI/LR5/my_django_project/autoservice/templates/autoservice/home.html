@@ -1,0 +1,24 @@
+{% extends "autoservice/base.html" %}
+
+{% block content %}
+  <h1>Добро пожаловать в Автосервис!</h1>
+  
+  <!-- Блок услуг -->
+  <section>
+    <h2>Наши услуги</h2>
+    {% if services %}
+      <ul>
+        {% for service in services %}
+          <li>
+            <strong>{{ service.name }}</strong> — {{ service.price }} руб.
+            <br>
+            {{ service.description }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>На данный момент нет доступных услуг.</p>
+    {% endif %}
+  </section>
+  
+  {% endblock %}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Api_Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+
+body {
+  background-color: #faf8f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #3a2f2a;
+  margin: 0;
+  padding: 0;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="map" style="height: 800px; margin-bottom: 20px;"></div>
+    </div>
+</body>
+
+
+<script>
+  const Services = [{"name": "Сервис №1", "lat": 53.9092374, "lon": 27.4963733}, {"name": "Сервис №2", "lat": 53.9059255, "lon": 27.5298126}, {"name": "Сервис №3", "lat": 53.9202742, "lon": 27.4994993}];
+
+  const map = L.map('map').setView([53.9, 27.5667], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  Services.forEach(service => {
+    L.marker([service.lat, service.lon])
+      .addTo(map)
+      .bindPopup(`<b>${service.name}</b>`);
+  });
+</script>

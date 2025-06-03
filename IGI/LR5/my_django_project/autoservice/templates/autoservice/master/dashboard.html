@@ -1,0 +1,56 @@
+{% extends "autoservice/base.html" %}
+
+{% block content %}
+  <h1>Панель мастера</h1>
+  
+  <h2>Расписание заказов</h2>
+  {% if orders %}
+    <table border="1" cellspacing="0" cellpadding="5">
+      <thead>
+        <tr>
+          <th>Дата</th>
+          <th>Клиент</th>
+          <th>Услуга</th>
+          <th>Тип авто</th>
+          <th>Использованные запчасти</th>
+          <th>Итоговая стоимость</th>
+          <th>Примечания</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td>{{ order.order_date|date:"d.m.Y H:i" }}</td>
+            <td>{{ order.client.user.username }}</td>
+            <td>{% if order.service %}{{ order.service.name }}{% else %}—{% endif %}</td>
+            <td>{% if order.auto_type %}{{ order.auto_type.name }}{% else %}—{% endif %}</td>
+            <td>
+              {% if order.spare_parts.all %}
+                {% for spare in order.spare_parts.all %}
+                  {{ spare.name }} ({{ spare.price }} руб.){% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              {% else %}
+                Нет
+              {% endif %}
+            </td>
+            <td>{{ order.total_cost }} руб.</td>
+            <td>{{ order.notes }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>На данный момент у вас нет заказов.</p>
+  {% endif %}
+
+  <h2>Итоговая сумма по клиентам</h2>
+  {% if aggregated_totals %}
+    <ul>
+      {% for client, total in aggregated_totals.items %}
+        <li>{{ client }}: {{ total }} руб.</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Нет данных для агрегации.</p>
+  {% endif %}
+{% endblock %}

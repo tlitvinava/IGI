@@ -1,0 +1,31 @@
+{% extends "autoservice/base.html" %}
+
+{% block content %}
+  <h1>Услуги</h1>
+
+  <form method="get">
+    <label for="price_min">Цена от:</label>
+    <input type="number" name="price_min" id="price_min" step="0.01" value="{{ filter.price_min }}">
+    
+    <label for="price_max">Цена до:</label>
+    <input type="number" name="price_max" id="price_max" step="0.01" value="{{ filter.price_max }}">
+    
+    <button type="submit">Применить фильтры</button>
+  </form>
+
+  <hr>
+
+  {% if services %}
+    <ul>
+      {% for service in services %}
+        <li>
+          <strong>{{ service.name }}</strong><br>
+          Цена: {{ service.price }} руб.<br>
+          {{ service.description }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Нет услуг, соответствующих заданным фильтрам.</p>
+  {% endif %}
+{% endblock %}

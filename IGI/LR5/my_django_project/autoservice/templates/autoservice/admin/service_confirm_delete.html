@@ -1,0 +1,11 @@
+{% extends "autoservice/admin_base.html" %}
+
+{% block content %}
+  <h2>Подтверждение удаления услуги №{{ object.id }}</h2>
+  <p>Вы действительно хотите удалить услугу "{{ object.name }}"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Удалить</button>
+    <a href="{% url 'admin-misc' %}">Отмена</a>
+  </form>
+{% endblock %}

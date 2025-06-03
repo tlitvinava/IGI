@@ -1,0 +1,18 @@
+{% extends "autoservice/base.html" %}
+{% block content %}
+<h2>Мои заказы</h2>
+{% if orders %}
+<ul>
+    {% for order in orders %}
+    <li>
+        Заказ №{{ order.id }} – Статус: {{ order.status }} – от {{ order.order_date|date:"d/m/Y H:i" }}<br>
+        {% if order.service %}Услуга: {{ order.service.name }}{% endif %}<br>
+        {% if order.notes %}Примечания: {{ order.notes }}{% endif %}<br>
+        Общая стоимость: {{ order.total_cost }} руб.
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>У вас пока нет заказов.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Автосервис</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Мой Автосервис</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Главная</a></li>
+                <li><a href="{% url 'about' %}">О компании</a></li>
+                <li><a href="{% url 'news' %}">Новости</a></li>
+                <li><a href="{% url 'glossary' %}">Словарь терминов и понятий</a></li>
+                <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                <li><a href="{% url 'privacy_policy' %}">Политика конфиденциальности</a></li>
+                <li><a href="{% url 'vacancies' %}">Вакансии</a></li>
+                <li><a href="{% url 'reviews' %}">Отзывы</a></li>
+                <li><a href="{% url 'promo_codes' %}">Промокоды и купоны</a></li>
+                <li><a href="{% url 'service-list' %}">Услуги</a></li>
+                <li><a href="{% url 'api_map' %}">Карта сервисов</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'profile' %}">Личный кабинет</a></li>
+                    {% if user.role == "admin" %}
+                        <li>
+                            <a href="{% url 'admin-dashboard' %}">Админ панель</a>
+                            <ul>
+                                <li><a href="{% url 'admin-dashboard' %}">Главная админки</a></li>
+                                <li><a href="{% url 'admin-orders' %}">Ремонты</a></li>
+                                <!-- Здесь можно добавить дополнительные ссылки -->
+                            </ul>
+                        </li>
+                    {% elif user.role == "client" %}
+                        <li>
+                            <a href="#">Панель Заказов</a>
+                            <ul>
+                                <li><a href="{% url 'my-orders' %}">Мои заказы</a></li>
+                                <li><a href="{% url 'order-create' %}">Создать заказ</a></li>
+                            </ul>
+                        </li>
+                    {% elif user.role == "master" %}
+                        <li><a href="{% url 'master-dashboard' %}">Панель мастера</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'logout' %}">Выход</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Войти</a></li>
+                    <li><a href="{% url 'register' %}">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer>
+        <p>© 2025 Автосервис. Все права защищены.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{% extends "autoservice/base.html" %}
+
+{% block content %}
+<h1>Список услуг</h1>
+<ul>
+  {% for service in services %}
+  <li>
+    <a href="{% url 'service-detail' service.pk %}">
+      {{ service.name }} – {{ service.price }} руб.
+    </a>
+    {% if user.is_authenticated and user.role == "admin" %}
+      [<a href="{% url 'service-update' service.pk %}">Редактировать</a>]
+      [<a href="{% url 'service-delete' service.pk %}">Удалить</a>]
+    {% endif %}
+  </li>
+  {% empty %}
+  <li>Нет доступных услуг</li>
+  {% endfor %}
+</ul>
+{% if user.is_authenticated and user.role == "admin" %}
+  <p><a href="{% url 'service-create' %}">Добавить новую услугу</a></p>
+{% endif %}
+{% endblock %}
