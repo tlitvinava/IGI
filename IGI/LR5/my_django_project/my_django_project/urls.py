@@ -18,13 +18,18 @@ from django.urls import path, include
 from django.conf.urls import handler404
 from django.conf import settings
 from django.conf.urls.static import static
+from autoservice.views import statistics_view
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', include('autoservice.urls')),
+    path('statistics/', statistics_view, name='statistics'),
 ]
 
 handler404 = 'autoservice.views.handle404'
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

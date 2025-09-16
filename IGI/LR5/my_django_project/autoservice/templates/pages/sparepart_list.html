@@ -1,0 +1,16 @@
+{% extends "autoservice/base.html" %}
+{% block content %}
+<h2>Список запчастей</h2>
+{% if spare_parts %}
+    <ul>
+        {% for part in spare_parts %}
+            <li>
+                <a href="{% url 'sparepart-detail' part.pk %}">{{ part.name }}</a> — {{ part.price }} BYN
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Запчастей пока нет.</p>
+{% endif %}
+{% endblock %}
+

@@ -1,0 +1,11 @@
+[
+  {
+    "model": "autoservice.partner",
+    "pk": 1,
+    "fields": {
+      "name": "Тестовый партнёр",
+      "logo": "partners/test_logo.png",
+      "website": "https://example.com"
+    }
+  }
+]

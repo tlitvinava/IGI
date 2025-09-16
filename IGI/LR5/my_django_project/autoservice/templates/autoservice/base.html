@@ -5,6 +5,8 @@
     <title>Автосервис</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 </head>
 <body>
     <header>
@@ -21,21 +23,29 @@
                 <li><a href="{% url 'reviews' %}">Отзывы</a></li>
                 <li><a href="{% url 'promo_codes' %}">Промокоды и купоны</a></li>
                 <li><a href="{% url 'service-list' %}">Услуги</a></li>
+                <!-- Новые ссылки -->
+                <li><a href="{% url 'service-list' %}">Все услуги</a></li>
+                <li><a href="{% url 'sparepart-list' %}">Все товары</a></li>
                 <li><a href="{% url 'api_map' %}">Карта сервисов</a></li>
+                <li><a href="{% url 'partners' %}">Партнёры</a></li>
+
                 {% if user.is_authenticated %}
+                    <li><a href="{% url 'cart' %}">Корзина</a></li>
+                    <li><a href="{% url 'checkout' %}">Оплата</a></li>
                     <li><a href="{% url 'profile' %}">Личный кабинет</a></li>
+
                     {% if user.role == "admin" %}
                         <li>
                             <a href="{% url 'admin-dashboard' %}">Админ панель</a>
                             <ul>
                                 <li><a href="{% url 'admin-dashboard' %}">Главная админки</a></li>
                                 <li><a href="{% url 'admin-orders' %}">Ремонты</a></li>
-                                <!-- Здесь можно добавить дополнительные ссылки -->
+                                <li><a href="{% url 'statistics' %}">Статистика</a></li>
                             </ul>
                         </li>
                     {% elif user.role == "client" %}
                         <li>
-                            <a href="#">Панель Заказов</a>
+                            <a href="#">Панель заказов</a>
                             <ul>
                                 <li><a href="{% url 'my-orders' %}">Мои заказы</a></li>
                                 <li><a href="{% url 'order-create' %}">Создать заказ</a></li>
@@ -43,7 +53,9 @@
                         </li>
                     {% elif user.role == "master" %}
                         <li><a href="{% url 'master-dashboard' %}">Панель мастера</a></li>
+                        <li><a href="{% url 'statistics' %}">Статистика</a></li>
                     {% endif %}
+
                     <li><a href="{% url 'logout' %}">Выход</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Войти</a></li>

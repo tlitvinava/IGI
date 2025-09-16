@@ -1,34 +1,47 @@
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Service
-from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import TemplateView
-from .models import Service
-from .models import Order, Client, Master
-from .forms import CustomUserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.views.generic import TemplateView
-from .forms import AutoTypeForm, ServiceForm, SparePartForm
 from django.contrib.auth import logout
-from .models import Article, CompanyInfo, GlossaryTerm, Contact, Vacancy, Review, PromoCode
 
+from django.views.generic import ListView, TemplateView, RedirectView
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.urls import reverse
 
-from django.views.generic import ListView
-from .models import Service
+from .models import Partner, CartItem, Service, SparePart, Payment, Order
+from django.db.models import Sum
+
+from .models import (
+    Service,
+    Order,
+    Client,
+    Master,
+    Article,
+    CompanyInfo,
+    GlossaryTerm,
+    Contact,
+    Vacancy,
+    Review,
+    PromoCode,
+    CustomUser,
+    AutoType,
+    SparePart,
+    Coupon
+)
+from .forms import CustomUserCreationForm, AutoTypeForm, ServiceForm, SparePartForm, ReviewForm
 
 class ServiceListView(ListView):
     model = Service
     template_name = "autoservice/services.html"
     context_object_name = "services"
-    paginate_by = 10  # если требуется разбивка по страницам, можно убрать этот параметр
+    paginate_by = 10  
 
     def get_queryset(self):
         queryset = Service.objects.all()
@@ -53,13 +66,6 @@ class ServiceListView(ListView):
         }
         return context
 
-# autoservice/views.py
-from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView
-from .models import Review
-from .forms import ReviewForm
-
 class ReviewCreateView(LoginRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm
@@ -71,16 +77,12 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
         form.instance.name = self.request.user.username
         return super().form_valid(form)
 
-from django.views.generic import DetailView
-from .models import Article
 
 class ArticleDetailView(DetailView):
     model = Article
     template_name = "pages/article_detail.html"
     context_object_name = "article"
 
-from django.views.generic import TemplateView
-from .models import Contact, Master, CustomUser
 
 class ContactsView(TemplateView):
     template_name = "pages/contacts.html"
@@ -93,7 +95,6 @@ class ContactsView(TemplateView):
         return context
 
 
-# Детальный просмотр услуги (Read – detail)
 class ServiceDetailView(DetailView):
     model = Service
     context_object_name = 'service'
@@ -149,13 +150,6 @@ class ServiceCreateView(LoginRequiredMixin, CreateView):
         return reverse('service-detail', kwargs={'pk': self.object.pk})
     
 
-# class MasterDashboardView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
-#     template_name = 'autoservice/master_dashboard.html'
-    
-#     def test_func(self):
-#         # Проверяем, что пользователь состоит в группе "Masters"
-#         return self.request.user.groups.filter(name='Masters').exists()
-
 def custom_404(request, exception):
     """
     Кастомный обработчик ошибки 404, который рендерит главную страницу.
@@ -173,16 +167,13 @@ class MyOrdersListView(LoginRequiredMixin, ListView):
         client_obj = self.request.user.client  
         return Order.objects.filter(client=client_obj).order_by("-order_date")
 
-# autoservice/views.py (дополнение)
 class OrderCreateView(LoginRequiredMixin, CreateView):
     model = Order
     fields = ['master', 'auto_type', 'service', 'spare_parts', 'notes']  
-    # Здесь можно добавить любые поля, которые вы хотите предложить пользователю.
     template_name = "orders/order_form.html"
     success_url = reverse_lazy("my-orders")  
 
     def form_valid(self, form):
-        # Назначаем клиента из связанного объекта пользователя.
         form.instance.client = self.request.user.client  
         return super().form_valid(form)
 
@@ -191,7 +182,6 @@ class HomeView(TemplateView):
     template_name = "autoservice/home.html"
 
 def handle404(request, exception):
-    # Вместо показа стандартной 404-страницы делаем редирект на главную /home
     return redirect('home')
 
 def register(request):
@@ -216,7 +206,6 @@ def register(request):
     return render(request, "autoservice/register.html", {"form": form})
 
 
-
 class ProfileView(LoginRequiredMixin, TemplateView):
     template_name = "autoservice/profile.html"
 
@@ -230,9 +219,6 @@ class AdminDashboardView(LoginRequiredMixin, TemplateView):
             raise PermissionDenied("У вас нет доступа к админ-панели.")
         return super().dispatch(request, *args, **kwargs)
     
-# autoservice/views.py
-from django.views.generic import ListView
-from .models import Order  # ваша модель Order (связана с Client, Master, и т.д.)
 
 class OrderAdminListView(LoginRequiredMixin, ListView):
     model = Order
@@ -243,9 +229,6 @@ class OrderAdminListView(LoginRequiredMixin, ListView):
         if request.user.role != 'admin':
             raise PermissionDenied("У вас нет доступа к админ-панели.")
         return super().dispatch(request, *args, **kwargs)
-
-from django.views.generic import UpdateView
-from django.urls import reverse_lazy
 
 class OrderAdminUpdateView(LoginRequiredMixin, UpdateView):
     model = Order
@@ -259,16 +242,8 @@ class OrderAdminUpdateView(LoginRequiredMixin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-# autoservice/views.py
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
-from .models import AutoType, Service, SparePart
-from .forms import AutoTypeForm, ServiceForm, SparePartForm
-
 @login_required
 def admin_misc_dashboard(request):
-    # Доступ разрешён только администратору
     if request.user.role != 'admin':
         raise PermissionDenied("У вас нет доступа к админ-панели.")
 
@@ -309,14 +284,6 @@ def admin_misc_dashboard(request):
         'spare_parts': spare_parts,
     }
     return render(request, 'autoservice/admin/misc_dashboard.html', context)
-
-# autoservice/views.py
-
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
-from django.urls import reverse_lazy
-from django.views.generic import UpdateView, DeleteView
-from .models import AutoType, Service, SparePart
 
 # Представление для редактирования типа авто
 class AutoTypeUpdateView(LoginRequiredMixin, UpdateView):
@@ -376,7 +343,7 @@ class SparePartUpdateView(LoginRequiredMixin, UpdateView):
             raise PermissionDenied("У вас нет доступа к админ-панели.")
         return super().dispatch(request, *args, **kwargs)
 
-# Представление для удаления запчасти
+#Представление для удаления запчасти
 class SparePartDeleteView(LoginRequiredMixin, DeleteView):
     model = SparePart
     template_name = "autoservice/admin/spare_confirm_delete.html"
@@ -387,13 +354,15 @@ class SparePartDeleteView(LoginRequiredMixin, DeleteView):
             raise PermissionDenied("У вас нет доступа к админ-панели.")
         return super().dispatch(request, *args, **kwargs)
 
-# autoservice/views.py
-
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
-from django.views.generic import ListView
-from django.db.models import Sum
-from .models import Order
+def spare_part_delete(request, pk):
+    spare = get_object_or_404(SparePart, pk=pk)
+    if request.user.role != "admin":
+        raise PermissionDenied("У вас нет доступа к админ-панели.")
+    if request.method == "POST":
+        spare.delete()
+        return redirect(reverse_lazy("admin-misc"))
+    
+    return render(request, "autoservice/admin/spare_confirm_delete.html", {"object": spare})
 
 class MasterDashboardView(LoginRequiredMixin, ListView):
     model = Order
@@ -420,20 +389,21 @@ def logout_view(request):
     logout(request)
     return redirect('home') 
 
-from django.views.generic import TemplateView
-from .models import Service, PromoCode, Coupon
-
 class HomeView(TemplateView):
     template_name = "autoservice/home.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Получаем все услуги без применения фильтров
-        context['services'] = Service.objects.all()
-        # Получаем активные промокоды и купоны для отображения
-        context['promo_codes'] = PromoCode.objects.filter(active=True)
-        context['coupons'] = Coupon.objects.filter(active=True)
+        # Последняя статья
+        context["latest_article"] = Article.objects.order_by('-pub_date').first()
+        # Списки для главной
+        context["services"] = Service.objects.all()[:5]
+        context["spare_parts"] = SparePart.objects.all()[:5]
+        # Промокоды и купоны
+        context["promo_codes"] = PromoCode.objects.filter(active=True)
+        context["coupons"] = Coupon.objects.filter(active=True)
         return context
+
 
 class AboutView(TemplateView):
     template_name = "autoservice/about.html"
@@ -488,7 +458,109 @@ class PromoCodesView(ListView):
 def custom_404(request, exception):
     return render(request, "404.html", status=404)
 
-from django.shortcuts import render
-
 def api_map_view(request):
     return render(request, "autoservice/api_map.html")
+
+def statistics_view(request):
+    # Проверка доступа: только admin или master
+    print ("fcvgjjnl,")
+    if request.user.role not in ["admin", "master"]:
+        raise PermissionDenied("У вас нет доступа к данной странице.")
+    print ("456")
+    return render(request, "autoservice/statistics.html")
+
+
+# --- Партнёры ---
+class PartnerListView(ListView):
+    model = Partner
+    template_name = "pages/partners.html"
+    context_object_name = "partners"
+    ordering = ["name"]
+
+
+# --- Корзина ---
+@method_decorator(login_required, name='dispatch')
+class CartView(TemplateView):
+    template_name = "pages/cart.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_items = CartItem.objects.filter(user=self.request.user)
+        total = sum(item.subtotal for item in cart_items)
+        context["cart_items"] = cart_items
+        context["total"] = total
+        return context
+
+
+@login_required
+def add_to_cart(request, item_type, pk):
+    """item_type: 'service' или 'spare'"""
+    if item_type == "service":
+        service = get_object_or_404(Service, pk=pk)
+        CartItem.objects.create(user=request.user, service=service, quantity=1)
+    elif item_type == "spare":
+        spare = get_object_or_404(SparePart, pk=pk)
+        CartItem.objects.create(user=request.user, spare_part=spare, quantity=1)
+    return redirect("cart")
+
+
+@login_required
+def remove_from_cart(request, pk):
+    item = get_object_or_404(CartItem, pk=pk, user=request.user)
+    item.delete()
+    return redirect("cart")
+
+
+@login_required
+def update_cart_quantity(request, pk, action):
+    item = get_object_or_404(CartItem, pk=pk, user=request.user)
+    if action == "inc":
+        item.quantity += 1
+    elif action == "dec" and item.quantity > 1:
+        item.quantity -= 1
+    item.save()
+    return redirect("cart")
+
+
+# --- Оплата ---
+@login_required
+def checkout(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    if not cart_items.exists():
+        return redirect("cart")
+
+    # Создаём заказ
+    order = Order.objects.create(client=request.user.client)
+    for item in cart_items:
+        if item.service:
+            order.service = item.service
+        if item.spare_part:
+            order.spare_parts.add(item.spare_part)
+    order.save()
+
+    # Создаём платёж
+    total_amount = sum(item.subtotal for item in cart_items)
+    Payment.objects.create(order=order, amount=total_amount, status=Payment.Status.PAID)
+
+    # Очищаем корзину
+    cart_items.delete()
+
+    return redirect(reverse("payment_success"))
+
+
+@login_required
+def payment_success(request):
+    return render(request, "pages/payment_success.html")
+
+# --- Список запчастей ---
+class SparePartListView(ListView):
+    model = SparePart
+    template_name = "pages/sparepart_list.html"
+    context_object_name = "spare_parts"
+    ordering = ["name"]
+
+# --- Детальная страница запчасти ---
+class SparePartDetailView(DetailView):
+    model = SparePart
+    template_name = "pages/sparepart_detail.html"
+    context_object_name = "spare_part"

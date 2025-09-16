@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.db.models import Q
 from django.core.validators import RegexValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser, Group, Permission
@@ -160,14 +161,6 @@ class AutoType(models.Model):
 # ---------------------------
 # Запчасти
 # ---------------------------
-# class SparePart(models.Model):
-#     name = models.CharField(max_length=150, verbose_name="Название запчасти")
-#     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена запчасти", validators=[MinValueValidator(0)])
-#     description = models.TextField(blank=True, verbose_name="Описание запчасти")
-
-#     def __str__(self):
-#         return self.name
-
 class SparePart(models.Model):
     name = models.CharField(max_length=150, verbose_name="Название запчасти")
     price = models.DecimalField(
@@ -329,3 +322,112 @@ class Review(models.Model):
 
     def __str__(self):
         return self.name
+    
+# ---------------------------
+# Партнёры (Partner)
+# ---------------------------
+class Partner(models.Model):
+    name = models.CharField(max_length=200, verbose_name="Название компании")
+    logo = models.ImageField(upload_to="partners/", verbose_name="Логотип", null=True, blank=True)
+    website = models.URLField(verbose_name="Сайт компании")
+
+    class Meta:
+        verbose_name = "Партнёр"
+        verbose_name_plural = "Партнёры"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+# ---------------------------
+# Элементы корзины (CartItem)
+# ---------------------------
+class CartItem(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="cart_items",
+        verbose_name="Пользователь"
+    )
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="cart_items",
+        verbose_name="Услуга"
+    )
+    spare_part = models.ForeignKey(
+        SparePart,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="cart_items",
+        verbose_name="Запчасть"
+    )
+    quantity = models.PositiveIntegerField(default=1, verbose_name="Количество", validators=[MinValueValidator(1)])
+    added_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата добавления")
+
+    class Meta:
+        verbose_name = "Элемент корзины"
+        verbose_name_plural = "Элементы корзины"
+        ordering = ["-added_at"]
+        constraints = [
+            # Ровно один тип позиции: либо услуга, либо запчасть
+            models.CheckConstraint(
+                check=(
+                    # (service IS NOT NULL AND spare_part IS NULL) OR (service IS NULL AND spare_part IS NOT NULL)
+                    (Q(service__isnull=False) & Q(spare_part__isnull=True)) |
+                    (Q(service__isnull=True) & Q(spare_part__isnull=False))
+                ),
+                name="cartitem_exactly_one_of_service_or_sparepart"
+            )
+        ]
+
+    def __str__(self):
+        title = self.service.name if self.service else self.spare_part.name
+        return f"{title} × {self.quantity}"
+
+    @property
+    def unit_price(self):
+        if self.service:
+            return self.service.price
+        if self.spare_part:
+            return self.spare_part.price
+        return 0
+
+    @property
+    def subtotal(self):
+        return self.unit_price * self.quantity
+
+# ---------------------------
+# Платёж (Payment)
+# ---------------------------
+class Payment(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Ожидание"
+        PAID = "paid", "Оплачен"
+        FAILED = "failed", "Ошибка"
+        CANCELED = "canceled", "Отменён"
+
+    order = models.OneToOneField(
+        Order,
+        on_delete=models.CASCADE,
+        related_name="payment",
+        verbose_name="Заказ"
+    )
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Сумма")
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING, verbose_name="Статус")
+    method = models.CharField(max_length=50, verbose_name="Способ оплаты", blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создано")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Обновлено")
+    transaction_id = models.CharField(max_length=100, verbose_name="ID транзакции", blank=True)
+
+    class Meta:
+        verbose_name = "Платёж"
+        verbose_name_plural = "Платежи"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Платёж за заказ #{self.order_id} — {self.get_status_display()}"

@@ -1,9 +1,19 @@
 {% extends "autoservice/base.html" %}
 
 {% block content %}
-  <h1>{{ service.name }}</h1>
-  <p><strong>Описание:</strong> {{ service.description }}</p>
-  <p><strong>Стоимость:</strong> {{ service.price }} руб.</p>
-  <p><strong>Тип услуги:</strong> {{ service.service_type }}</p>
-  <p><a href="{% url 'service-list' %}">Вернуться к списку услуг</a></p>
+<h2>{{ service.name }}</h2>
+
+{% if service.image %}
+    <img src="{{ service.image.url }}" alt="{{ service.name }}" style="max-width:300px;">
+{% endif %}
+
+<p><strong>Цена:</strong> {{ service.price }} BYN</p>
+
+{% if service.description %}
+    <p>{{ service.description }}</p>
+{% else %}
+    <p>Описание услуги пока отсутствует.</p>
+{% endif %}
+
+<a href="{% url 'add_to_cart' 'service' service.pk %}" class="btn">Добавить в корзину</a>
 {% endblock %}

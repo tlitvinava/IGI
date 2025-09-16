@@ -1,0 +1,13 @@
+{% extends "autoservice/base.html" %}
+{% load static %}
+
+{% block content %}
+  <h1>Статистика заказов</h1>
+  <p>Ниже представлена статистика заказов по услугам:</p>
+  <div style="text-align: center; margin-top: 20px;">
+    <!-- Вместо 'orders_per_service.png' укажите корректный путь URL к файлу графика.
+         Если вы переместите файл в папку static/images/, то можно использовать -->
+    <img src="{% static 'images/orders_per_service.png' %}" alt="Статистика заказов">
+    <!-- <img src="/static/images/orders_per_service.png"> -->
+  </div>
+{% endblock %}

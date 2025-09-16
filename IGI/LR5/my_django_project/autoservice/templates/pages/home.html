@@ -1,6 +1,9 @@
 {% extends "autoservice/base.html" %}
+
 {% block content %}
 <h1>Главная</h1>
+
+{# Последняя статья #}
 {% if latest_article %}
   <h2>{{ latest_article.title }}</h2>
   <p>{{ latest_article.summary }}</p>
@@ -8,4 +11,47 @@
 {% else %}
   <p>Нет опубликованных статей.</p>
 {% endif %}
+
+<hr>
+
+{# Ссылки на разделы #}
+<nav>
+    <ul>
+        <li><a href="{% url 'service-list' %}">Все услуги</a></li>
+        <li><a href="{% url 'sparepart-list' %}">Все товары (запчасти)</a></li>
+    </ul>
+</nav>
+
+<hr>
+
+{# Превью списка услуг #}
+<h2>Наши услуги</h2>
+{% if services %}
+    <ul>
+        {% for service in services %}
+            <li>
+                <a href="{% url 'service-detail' service.pk %}">{{ service.name }}</a> — {{ service.price }} BYN
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Услуг пока нет.</p>
+{% endif %}
+
+<hr>
+
+{# Превью списка запчастей #}
+<h2>Наши товары</h2>
+{% if spare_parts %}
+    <ul>
+        {% for part in spare_parts %}
+            <li>
+                <a href="{% url 'sparepart-detail' part.pk %}">{{ part.name }}</a> — {{ part.price }} BYN
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Товаров пока нет.</p>
+{% endif %}
+
 {% endblock %}

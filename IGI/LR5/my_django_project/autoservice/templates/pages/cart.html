@@ -1,0 +1,32 @@
+{% extends "autoservice/base.html" %}
+{% block content %}
+<h2>Корзина</h2>
+{% if cart_items %}
+<table>
+    <tr>
+        <th>Товар/Услуга</th>
+        <th>Цена</th>
+        <th>Количество</th>
+        <th>Сумма</th>
+        <th>Действия</th>
+    </tr>
+    {% for item in cart_items %}
+    <tr>
+        <td>{{ item.service.name|default:item.spare_part.name }}</td>
+        <td>{{ item.unit_price }}</td>
+        <td>
+            <a href="{% url 'update_cart_quantity' item.pk 'dec' %}">-</a>
+            {{ item.quantity }}
+            <a href="{% url 'update_cart_quantity' item.pk 'inc' %}">+</a>
+        </td>
+        <td>{{ item.subtotal }}</td>
+        <td><a href="{% url 'remove_from_cart' item.pk %}">Удалить</a></td>
+    </tr>
+    {% endfor %}
+</table>
+<p>Итого: {{ total }}</p>
+<a href="{% url 'checkout' %}">Оплатить</a>
+{% else %}
+<p>Ваша корзина пуста.</p>
+{% endif %}
+{% endblock %}

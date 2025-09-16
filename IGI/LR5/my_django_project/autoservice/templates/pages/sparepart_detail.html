@@ -1,0 +1,19 @@
+{% extends "autoservice/base.html" %}
+
+{% block content %}
+<h2>{{ spare_part.name }}</h2>
+
+{% if spare_part.image %}
+    <img src="{{ spare_part.image.url }}" alt="{{ spare_part.name }}" style="max-width:300px;">
+{% endif %}
+
+<p><strong>Цена:</strong> {{ spare_part.price }} BYN</p>
+
+{% if spare_part.description %}
+    <p>{{ spare_part.description }}</p>
+{% else %}
+    <p>Описание запчасти пока отсутствует.</p>
+{% endif %}
+
+<a href="{% url 'add_to_cart' 'spare' spare_part.pk %}" class="btn">Добавить в корзину</a>
+{% endblock %}

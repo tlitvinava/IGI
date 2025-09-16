@@ -1,4 +1,5 @@
 {% extends "autoservice/base.html" %}
+{% load static %}
 
 {% block content %}
   <h1>Добро пожаловать в Автосервис!</h1>
@@ -21,4 +22,34 @@
     {% endif %}
   </section>
   
-  {% endblock %}
+  <!-- Блок новости -->
+  <section style="margin-top: 40px;">
+    <h2>Последняя новость</h2>
+    {% comment %}
+      Здесь можно либо передать из view объект последней новости (например, latest_article),
+      либо задать статичный пример (как показано ниже)
+    {% endcomment %}
+    <div class="news-item" style="border: 1px solid #ccc; padding: 20px; margin-bottom: 40px;">
+      <h3>Новая модель электромобиля — революция в мире авто</h3>
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQKc_z4Lm4bB8ObmbaXYB4N0tl3glo4AEFUw&s" 
+           alt="Новая модель электромобиля" style="max-width:600px; display:block; margin-bottom:20px;">
+      <p>Представлена инновационная модель электромобиля, сочетающая технологичные решения, высокую экологичность и передовые системы безопасности. Узнайте подробнее о новинке!</p>
+      <a href="{% url 'article_detail' 1 %}" class="btn btn-primary">Читать далее</a>
+    </div>
+  </section>
+  
+  <!-- Блок календаря -->
+  <div id="calendar" style="max-width: 500px; margin: 0 auto;"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'ru',
+        firstDay: 1,
+        events: []  // пока событий нет
+      });
+      calendar.render();
+    });
+  </script>
+{% endblock %}

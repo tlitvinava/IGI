@@ -40,8 +40,7 @@ class CustomUserCreationForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.date_of_birth = self.cleaned_data['birth_day']
-        # Если в вашей модели CustomUser отсутствует поле phone,
-        # его следует добавить или сохранить номер телефона в связанную модель (например, Client).
+
         user.phone = self.cleaned_data['phone']
         if commit:
             user.save()
